@@ -1,0 +1,114 @@
+#include <iostream>
+#include <thread>
+#include <vector>
+#include <chrono>
+#include <mutex>
+#include <random>
+#define N 5 
+#define O 2
+#define LEFT
+#define RIGHT
+#define PENSANDO 0 
+#define FAMINTO 1 
+#define COMENDO 2
+#include <pthread.h>
+
+
+using std::this_thread::sleep_for;
+using std::rand;
+using std::chrono::milliseconds;
+
+int filosof[N][O];
+int maos[5]={0,0,0,0,0};
+
+class Philosopher {
+	public:
+	int garfos =5;
+	int y;
+	int t;
+	
+void filosofo(){
+	
+	int i =5;
+	int e;
+    while(true){
+    	for(e=0;e<5;e++){
+	
+         pense(e);  /* Filosofo está pensando */
+         pegue_garfo(e); /* pega o garfo esquerdo */
+         pegue_garfo(e); /* pega o garfo direito*/
+         coma(e);
+         
+     };
+    }
+}
+
+void pense(int e)
+{
+	if(maos[e]!=1&&filosof[e][1]!= 1){
+  printf("filosofo %d pensando\n",e+1);
+}
+
+  sleep_for(milliseconds(rand() % 5000));
+
+}
+
+void coma(int e)
+{
+	 y=0;
+	if(filosof[e][1]== 1){
+		y=1;
+	}
+	if(maos[e]==2){
+  printf("filosofo %d comendo\n",e+1);
+}
+
+  int n = rand() % 2;
+  filosof[e][0] = n;//se for 1 continua comendo
+  if(n==1){
+  filosof[e][1] = 1;
+   }else{
+   	filosof[e][1] = 0;
+   }
+   if(y== 1 && filosof[e][1]== 0){
+   	largar_garfo(e); /* larga o garfo esquerdo*/
+	//largar_garfo(e);
+   };
+sleep_for(milliseconds(rand() % 5000));
+}
+
+void pegue_garfo(int i){ 
+	if(filosof[i][0]==0 && garfos>0 && maos[i]!=2){
+		printf("filosofo %d pegando garfo\n",i);
+		garfos=garfos-1;
+
+		maos[i]=maos[i]+1;
+		
+	}
+	if(garfos==0){
+		printf("filosofo %d passando fome\n",i);
+	}
+
+}
+
+void largar_garfo(int i){ 
+	if(filosof[i][0]==0&&maos[i]!=1){
+		if(garfos!=5){
+		garfos=garfos+1;	
+		//garfos=garfos+1;
+		maos[i]=0;
+        }
+		printf("filosofo %d largando garfo\n",i);
+	}	
+
+}
+
+};
+int main(int argc, char** argv) {
+	
+Philosopher fil;
+fil.filosofo();
+	
+	
+	return 0;	
+}
